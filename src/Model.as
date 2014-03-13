@@ -72,7 +72,7 @@ package  {
 		
 		public function init():void {
 			
-			fileList  = ["library/assets/theModel.awd",];
+			fileList  = ["library/assets/theModel3.awd",];
 			
 			modelNames = ['a'];
 			
@@ -90,7 +90,7 @@ package  {
 			view.camera.lens.far = 15000;
 			addChild(view);
 			
-			cameraController = new HoverController(view.camera, null, 180, 0, 100);
+			cameraController = new HoverController(view.camera, null, 180, 0, 150);
 			
 			
 			cameraController.yFactor = 1;

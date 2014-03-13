@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cml tuio="false" simulator="false">
+
+<Stage fullscreen="true" />
+
+<LibraryKit>
+	<Library type="swf" src="library/swfs/openexhibits_assets.swf" />	
+</LibraryKit>
+
+<Hotspot x="0" y="0" component="oe-text-box" tether="false" compX="25" compY="150" compTween="true" compResetOnOpen="true" compAddOnOpen="true">
+	<Button dispatch="down:hotspot" initial="btn-vis" down="btn-vis" up="btn-vis">
+		<Image id="btn-vis" src="library/assets/oe.png" x="0" y="0" />  
+		<Graphic id="btn-hit" shape="rectangle" fill="color" color="0xffff00" lineStroke="0" width="500" height="125" alpha="0"/>
+	</Button>
+</Hotspot>
+
+<ModelPopup id="oe-text-box" visible="false" x="25" y="150" rotation="0" alpha=".75">
+	<Graphic shape="rectangle" width="500" height="520" color="0xffffff" lineStroke="0" lineColor="0x000000" />
+	<Image x="20" y="20" src="library/assets/oe-pic.png" />   
+	<Text textBitmap="true" selectable="false" font="OpenSansRegular" fontSize="18" x="20" y="230" width="440" height="300" wordWrap="true" multiline="true" color="0x000000" 
+		text="Open Exhibits focuses on the development of new human computer interaction (HCI) exhibits that holds the promise of creating visitor experiences that are physically engaging and socially interactive. The Open Exhibits software collection includes templates, components, and utilities that serve as building blocks for creating digital exhibits and interactives. These tools facilitate the development of applications that encourage shared-surface, collaborative computing and other HCI innovations."/>
+	<Include src="library/cml/buttons/close-button-oe.cml"/>
+	<Gesture ref="n-drag" />
+</ModelPopup>
+
+<Include src="library/cml/model-popups.cml"/>
+<Include src="library/cml/buttons/model-buttons.cml"/>
+
+</cml>

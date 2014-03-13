@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cml tuio="false" simulator="false">
+
+<Stage fullscreen="true" />
+
+<LibraryKit>
+	<Library type="swf" src="library/swfs/openexhibits_assets.swf" />	
+</LibraryKit>
+
+<Image id="btn-vis" src="library/assets/GW_Installer_Logo.png" x="20" y="15" /> 
+
+</cml>
