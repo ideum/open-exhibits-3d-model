@@ -72,7 +72,7 @@ package  {
 		
 		public function init():void {
 			
-			fileList  = ["library/assets/theModel3.awd",];
+			fileList  = ["library/assets/theModel.awd",];
 			
 			modelNames = ['a'];
 			
