@@ -11,6 +11,7 @@ package  {
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.lightpickers.StaticLightPicker;
 	import away3d.materials.MaterialBase;
+	import away3d.primitives.SphereGeometry;
 	import com.gestureworks.away3d.*;
 	import com.gestureworks.away3d.TouchManager3D;
 	import com.gestureworks.away3d.utils.*;
@@ -31,16 +32,15 @@ package  {
 
 	public class Model extends Sprite { 	
 
-		private var hitMeshAlpha:Number = 0;
+		private var hitMeshAlpha:Number = 0 ;
 		
 		private var minScale:Number = .75;
 		private var maxScale:Number = 1.5;
 		
-		private var maxRotationX = 60;
-		private var minRotationX = -maxRotationX;
+		private var maxRotationX:Number = 60;
+		private var minRotationX:Number = -maxRotationX;
 		
 		private var models:Array = [];
-		private var modelNames:Array = [];
 		private var modelIndex:Number = 1;
 		private var modelButtons:Array = [];	
 		private var modelPositions:Array = [];
@@ -50,6 +50,13 @@ package  {
 		private var modelRotationsX:Array = [];
 		private var modelRotationsY:Array = [];
 
+		private var hotspots:Array = []; 
+		private var hotspotFiles:Array = [];
+		private var hotspotPositions:Array = [];
+		private var hotspotContainers:Array = [];
+		
+		private var modelsLoaded:Boolean = false, hotspotsLoaded:Boolean = false;
+		
 		private var touchSprites:Array = [];
 		private var view:View3D;
 		private var container:ObjectContainer3D;
@@ -61,6 +68,7 @@ package  {
 		private var initialized:Boolean = false;
 		
 		private var hitGeometry:CubeGeometry;
+		private var hotspotGeometry:CubeGeometry;
 		
 		private var light:DirectionalLight;
 		private var lightPicker:StaticLightPicker;
@@ -72,15 +80,16 @@ package  {
 		
 		public function init():void {
 			
-			fileList  = ["library/assets/theModel.awd",];
-			
-			modelNames = ['a'];
-			
+			fileList  = ["library/assets/model/cube.awd"];
 			modelPositions = [0];
-			
 			modelRotationsX = [0];
-			
 			modelRotationsY = [0];
+			
+			//these are all the same shape but kept seperate incase of different hotspots.
+			hotspotFiles = ["library/assets/hotspots/hotspot01.awd",
+							"library/assets/hotspots/hotspot02.awd",
+							"library/assets/hotspots/hotspot03.awd"];
+			hotspotPositions = [[0, 0, 200], [0, 600, 300], [0, 0, 1500]];
 			
 			view = new View3D();
 			view.backgroundColor = 0x000000;
@@ -91,7 +100,6 @@ package  {
 			addChild(view);
 			
 			cameraController = new HoverController(view.camera, null, 180, 0, 150);
-			
 			
 			cameraController.yFactor = 1;
 			cameraController.wrapPanAngle = true;
@@ -108,10 +116,12 @@ package  {
 			
 			Parsers.enableAllBundled();		
 			AssetLibrary.addEventListener(LoaderEvent.RESOURCE_COMPLETE, resourceComplete);
-			AssetLibrary.addEventListener(AssetEvent.ASSET_COMPLETE, assetComplete);	
+			AssetLibrary.addEventListener(AssetEvent.ASSET_COMPLETE, assetComplete);
+			
 			AssetLibrary.load(new URLRequest(fileList[loadCnt]));
 			
 			hitGeometry = new CubeGeometry(100, 100, 100, 1, 1, 1);
+			hotspotGeometry = new CubeGeometry(10, 10, 10, 1, 1, 1);
 			
 			TouchManager3D.onlyTouchEnabled = false;
 			
@@ -121,30 +131,41 @@ package  {
 
 		private function assetComplete(e:AssetEvent):void {
 			if (e.asset is ObjectContainer3D && ObjectContainer3D(e.asset).parent == null) {
-				models.push(e.asset);
-				e.asset.name = modelNames[loadCnt];
+				if (e.asset.name.indexOf("hotspot") < 0)
+					models.push(e.asset);
+				else
+					hotspots.push(e.asset);
 			}		
 			else if (e.asset is MaterialBase) {
 				MaterialBase(e.asset).lightPicker = lightPicker;
 			}
 		}
 		
-		private function resourceComplete(e:LoaderEvent):void {				
-			loadCnt++;			
-			if (fileList.length == loadCnt) {
+		//load models, then hotspots, its nature is recursive with an AssetLibrary event listener
+		private function resourceComplete(e:LoaderEvent):void {		
+			trace(loadCnt);
+			loadCnt++;
+
+			if (loadCnt == fileList.length && !modelsLoaded) {
+				modelsLoaded = true;
+				loadCnt = 0;
+				AssetLibrary.load(new URLRequest(hotspotFiles[loadCnt]));
+			}
+			else if (loadCnt == hotspotFiles.length) {
+				hotspotsLoaded = true;
 				initObjects();
 			}
-			else {
+			else if (e.url.indexOf("hotspots") < 0 && !modelsLoaded){ 
 				AssetLibrary.load(new URLRequest(fileList[loadCnt]));
+			}
+			else if (e.url.indexOf("hotspots") >= 0 && !hotspotsLoaded){
+				AssetLibrary.load(new URLRequest(hotspotFiles[loadCnt]));
 			}
 		}
 		
 		private function initObjects():void {
-			var t:TouchSprite;
-			var p:Vector3D;
-			for (var i:int = 0; i < models.length; i++) {				
-			
-				p = Math3DUtils.sphericalToCartesian(new Vector3D( (modelPositions[i] ) , 0, 300));		
+			for (var i:int = 0; i < models.length; i++) {	
+				var p:Vector3D = Math3DUtils.sphericalToCartesian(new Vector3D(modelPositions[i], 0, 300));		
 				
 				var hitMesh:Mesh = new Mesh(hitGeometry);
 				hitMesh.material = new ColorMaterial(0xFFFFFF, hitMeshAlpha);
@@ -160,7 +181,7 @@ package  {
 				hitMesh.rotationY = modelRotationsY[i];
 				
 				// REGISTER THE ACTUAL 3D OBJECT TO THE MANAGER. WHAT RETURNS IS A TOUCH OBJECT THAT HOLDS THE TRANSFORMATION OF THAT OBJECT
-				t = TouchSprite(TouchManager3D.registerTouchObject(hitMesh, false));
+				var t:TouchSprite = TouchSprite(TouchManager3D.registerTouchObject(hitMesh, false));
 					t.view = view;
 					t.mouseEnabled = true; // ENSURES THAT THE 3D OBJECT CAN PROCESS TOUCH AND MOTION POINTS 
 					t.nativeTransform = false; // MUST BE MANUALLY SET TO FALSE
@@ -177,15 +198,57 @@ package  {
 					//CONFIGURES THE 3D MODEL TO PROCESS 3 STANDARD TOUCH GESTURES AND 2 3D MOTION GESTURES
 					// 1. A TRIGGER HOLD GESTURE THAT REQUIRES A TRIGGER POSTURE (WITH BENT THUMB) HELD IN PLACE FOR HALF A SECOND 
 					// 2. A PINCH DRAG/ROTATE GESTURE THAT REQUIRES THAT TWO FINGERS OR A FINGER AND A THUMB ARE CLOSE BUT NOT TOUCHING
-					t.gestureList = { 	"n-tap":true, "n-drag":true, "n-scale":true };
+					t.gestureList = { "n-drag":true, "n-scale":true };
 					
 					// SIMPLE TOUCH GESTURE LISTENERS
 					t.addEventListener(GWGestureEvent.DRAG, onModelDrag);
-					t.addEventListener(GWGestureEvent.TAP, onModelTap);
 					t.addEventListener(GWGestureEvent.SCALE, onModelScale);	
 				
-				touchSprites.push(t);				
+				touchSprites.push(t);
+				
 			}
+			
+			for (var i:int = 0; i < hotspots.length; i++) {
+				trace(hotspotPositions[i]);
+				var p:Vector3D = Math3DUtils.sphericalToCartesian(new Vector3D( hotspotPositions[i][0], hotspotPositions[i][1], hotspotPositions[i][2]));		
+				trace(p);
+				
+				var hotspotMesh:Mesh = new Mesh(hotspotGeometry);
+				hotspotMesh.material = new ColorMaterial(0xFFFFFF, hitMeshAlpha);
+				hotspotMesh.addChild(hotspots[i]);
+				container.addChild(hotspotMesh);
+				
+				hotspotMesh.x = p.x;
+				hotspotMesh.y = p.y;
+				hotspotMesh.z = p.z;
+				
+				// REGISTER THE ACTUAL 3D OBJECT TO THE MANAGER. WHAT RETURNS IS A TOUCH OBJECT THAT HOLDS THE TRANSFORMATION OF THAT OBJECT
+				var t:TouchSprite = TouchSprite(TouchManager3D.registerTouchObject(hotspotMesh, false));
+					t.view = view;
+					t.mouseEnabled = true; // ENSURES THAT THE 3D OBJECT CAN PROCESS TOUCH AND MOTION POINTS 
+					t.nativeTransform = false; // MUST BE MANUALLY SET TO FALSE
+					t.affineTransform = false; // MUST BE MANULALLY SET TO FALSE
+					//
+					t.motionEnabled = true; // ENSURES THAT MOTION GESTURES ARE PROCESSED ON THE TOUCHSPRITE
+					t.transform3d = false;  // ENSURES THAT THE 3D MOTION INTERACTION POINTS ARE PROJECTED INTO THE 2D STAGE
+					t.gestureEvents = true; // ENABLES GESTURE EVENT DISPATCHING ON THE TOUCHSPRITE
+					
+					// CONFIGURES THE TOUCH SPRITE TO COLLECT ONLY 3D MOTION INTERACTION POINTS FROM THE SKELETAL MODEL 
+					// THAT COLLIDE WITH THE 3D MODEL/OBJECT WHEN INITIALIZED (INTERACTIONPOINT_BEGIN)
+					t.motionClusterMode = "local_strong";
+					
+					//CONFIGURES THE 3D MODEL TO PROCESS 3 STANDARD TOUCH GESTURES AND 2 3D MOTION GESTURES
+					// 1. A TRIGGER HOLD GESTURE THAT REQUIRES A TRIGGER POSTURE (WITH BENT THUMB) HELD IN PLACE FOR HALF A SECOND 
+					// 2. A PINCH DRAG/ROTATE GESTURE THAT REQUIRES THAT TWO FINGERS OR A FINGER AND A THUMB ARE CLOSE BUT NOT TOUCHING
+					t.gestureList = { "n-tap":true };
+					
+					// SIMPLE TOUCH GESTURE LISTENERS
+					t.addEventListener(GWGestureEvent.TAP, onHotspotTap);	
+				
+				touchSprites.push(t);
+				hotspotContainers.push(t);
+			}
+			
 			initialized = true;
 		}
 		
@@ -199,14 +262,18 @@ package  {
 		private function onModelDrag(e:GWGestureEvent):void {
 			e.target.vto.rotationY -= e.value.drag_dx * .5;
 			
-			var val:Number = e.target.vto.rotationX - e.value.drag_dy * .5;
+			var val:Number = e.target.vto.rotationX - e.value.drag_dy * .25;
 			
 			if (val < minRotationX)
 				val = minRotationX;
 			else if (val > maxRotationX)
 				val = maxRotationX;
 				
-			e.target.vto.rotationX = val;	
+			e.target.vto.rotationX = val;
+			for (var i:Number =0 ; i < hotspotContainers.length; i++) {
+				hotspotContainers[i].vto.rotationY -= e.value.drag_dx * .5;
+				hotspotContainers[i].vto.rotationX = val;
+			}
 		}
 
 		private function onModelScale(e:GWGestureEvent):void {
@@ -222,8 +289,8 @@ package  {
 			e.target.vto.scaleZ = val;
 		}	
 
-		private function onModelTap(e:GWGestureEvent):void {
-			trace("model tap");
+		private function onHotspotTap(e:GWGestureEvent):void {
+			trace("model tap", e.target.vto.x, e.target.vto.y, e.target.z);
 		}		
 	}
 }
