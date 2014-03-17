@@ -84,7 +84,7 @@ package  {
 		public function init():void {
 			
 			fileList  = ["library/assets/model/cube.awd"];
-			modelPositions = [0];
+			modelPositions  = [0];
 			modelRotationsX = [0];
 			modelRotationsY = [0];
 			
@@ -94,7 +94,7 @@ package  {
 							"library/assets/hotspots/hotspot03.awd"];
 			hotspotNames = ["front", "top", "back"];
 			
-			hotspotPositions = [[0, 0, 200], [0, 100, 400], [0, 300, 300]];
+			hotspotPositions = [[0, 0, -100], [0, 100, 0], [0, 0, 100]];
 			
 			view = new View3D();
 			view.backgroundColor = 0x000000;
@@ -171,8 +171,9 @@ package  {
 		}
 		
 		private function initObjects():void {
+			container.z = 300;
 			for (var i:int = 0; i < models.length; i++) {	
-				var p:Vector3D = new Vector3D(modelPositions[i], 0, 300);		
+				var p:Vector3D = new Vector3D(modelPositions[i], 0, 0);		
 				
 				var hitMesh:Mesh = new Mesh(hitGeometry);
 				hitMesh.material = new ColorMaterial(0xFFFFFF, hitMeshAlpha);
@@ -180,8 +181,9 @@ package  {
 				container.addChild(hitMesh);
 				
 				hitMesh.x = p.x;
-				models[i].y = 0
+				hitMesh.y = p.y;
 				hitMesh.z = p.z;
+
 				models[i].rotationX = modelRotationsX[i];
 				models[i].rotationY = modelRotationsY[i];
 				hitMesh.name = models[i].name;
@@ -269,33 +271,30 @@ package  {
 		
 		// THE TARGET'S VTO (VIRTUAL TRANSFORM OBJECT) IS THE OBJECT SHOULD RECEIVED THE VIRTUAL TRANSFORMATIONS. IN THIS CASE IT HOLDS THE ACTUAL 3D OBJECT OR MESH
 		private function onModelDrag(e:GWGestureEvent):void {
-			e.target.vto.rotationY -= e.value.drag_dx * .5;
+			//container -= e.value.drag_dx * .5;
 			
-			var val:Number = e.target.vto.rotationX - e.value.drag_dy * .25;
+			var val:Number = container.rotationX - e.value.drag_dy * .25;
 			
 			if (val < minRotationX)
 				val = minRotationX;
 			else if (val > maxRotationX)
 				val = maxRotationX;
 				
-			e.target.vto.rotationX = val;
-			for (var i:Number =0 ; i < hotspotContainers.length; i++) {
-				hotspotContainers[i].vto.rotationY -= e.value.drag_dx * .5;
-				hotspotContainers[i].vto.rotationX = val;
-			}
+			container.rotationY -= e.value.drag_dx * .5;
+			container.rotationX = val;
 		}
 
 		private function onModelScale(e:GWGestureEvent):void {
-			var val:Number = e.target.vto.scaleX + e.value.scale_dsx * .75;
+			var val:Number = container.scaleX + e.value.scale_dsx * .75;
 			
 			if (val < minScale)
 				val = minScale;
 			else if (val > maxScale)
 				val = maxScale;
 				
-			e.target.vto.scaleX = val;
-			e.target.vto.scaleY = val;
-			e.target.vto.scaleZ = val;
+			container.scaleX = val;
+			container.scaleY = val;
+			container.scaleZ = val;
 		}	
 
 		private function onHotspotTap(e:GWGestureEvent):void {
