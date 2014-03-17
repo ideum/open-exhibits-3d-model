@@ -52,10 +52,13 @@ package  {
 
 		private var hotspots:Array = []; 
 		private var hotspotFiles:Array = [];
+		private var hotspotNames:Array = [];
 		private var hotspotPositions:Array = [];
 		private var hotspotContainers:Array = [];
 		
 		private var modelsLoaded:Boolean = false, hotspotsLoaded:Boolean = false;
+		
+		private var popups:Array = [];
 		
 		private var touchSprites:Array = [];
 		private var view:View3D;
@@ -89,7 +92,9 @@ package  {
 			hotspotFiles = ["library/assets/hotspots/hotspot01.awd",
 							"library/assets/hotspots/hotspot02.awd",
 							"library/assets/hotspots/hotspot03.awd"];
-			hotspotPositions = [[0, 0, 200], [0, 600, 300], [0, 0, 1500]];
+			hotspotNames = ["front", "top", "back"];
+			
+			hotspotPositions = [[0, 0, 200], [0, 100, 400], [0, 300, 300]];
 			
 			view = new View3D();
 			view.backgroundColor = 0x000000;
@@ -119,6 +124,8 @@ package  {
 			AssetLibrary.addEventListener(AssetEvent.ASSET_COMPLETE, assetComplete);
 			
 			AssetLibrary.load(new URLRequest(fileList[loadCnt]));
+			
+			popups = document.getElementsByTagName(ModelPopup);
 			
 			hitGeometry = new CubeGeometry(100, 100, 100, 1, 1, 1);
 			hotspotGeometry = new CubeGeometry(10, 10, 10, 1, 1, 1);
@@ -165,7 +172,7 @@ package  {
 		
 		private function initObjects():void {
 			for (var i:int = 0; i < models.length; i++) {	
-				var p:Vector3D = Math3DUtils.sphericalToCartesian(new Vector3D(modelPositions[i], 0, 300));		
+				var p:Vector3D = new Vector3D(modelPositions[i], 0, 300);		
 				
 				var hitMesh:Mesh = new Mesh(hitGeometry);
 				hitMesh.material = new ColorMaterial(0xFFFFFF, hitMeshAlpha);
@@ -210,13 +217,15 @@ package  {
 			
 			for (var i:int = 0; i < hotspots.length; i++) {
 				trace(hotspotPositions[i]);
-				var p:Vector3D = Math3DUtils.sphericalToCartesian(new Vector3D( hotspotPositions[i][0], hotspotPositions[i][1], hotspotPositions[i][2]));		
+				var p:Vector3D = new Vector3D( hotspotPositions[i][0], hotspotPositions[i][1], hotspotPositions[i][2]);		
 				trace(p);
 				
 				var hotspotMesh:Mesh = new Mesh(hotspotGeometry);
 				hotspotMesh.material = new ColorMaterial(0xFFFFFF, hitMeshAlpha);
 				hotspotMesh.addChild(hotspots[i]);
 				container.addChild(hotspotMesh);
+				
+				hotspotMesh.name = popups[i].id
 				
 				hotspotMesh.x = p.x;
 				hotspotMesh.y = p.y;
@@ -291,6 +300,17 @@ package  {
 
 		private function onHotspotTap(e:GWGestureEvent):void {
 			trace("model tap", e.target.vto.x, e.target.vto.y, e.target.z);
-		}		
+
+			var popup:ModelPopup = document.getElementById(e.target.vto.name);
+			for (var i:int = 0; i < popups.length; i++) {
+				if (popups[i].visible && popups[i] != popup) {
+					popups[i].tweenOut();
+				}
+			}
+			if (!popup.visible)
+				popup.tweenIn();
+			else
+				popup.tweenOut();	
+		}
 	}
 }

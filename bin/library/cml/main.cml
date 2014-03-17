@@ -10,4 +10,6 @@
 
 <Image id="btn-vis" src="library/assets/GW_Installer_Logo.png" x="20" y="15" /> 
 
+<Include src="library/cml/model-popups.cml"/>
+
 </cml>

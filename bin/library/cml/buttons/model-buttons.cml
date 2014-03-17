@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cml>
+
+<Container x="1680" y="35">
+	<ModelButton id="caffeine-button" src="library/assets/molecules/caffiene.png" width="57" resample="true" />
+	<ModelButton id="taurine-button" src="library/assets/molecules/taurine.png" width="57" resample="true" />
+	<ModelButton id="vitamin-b6-button" src="library/assets/molecules/vitamin-b6.png" width="57" resample="true" />
+	<Layout ref="ListLayout" spacingX="80" />
+</Container>
+
+</cml>

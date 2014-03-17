@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cml>
+
+<ModelPopup id="front" width="500" height="475">
+	<Graphic shape="rectangle" width="500" height="475" color="0xc36d34" lineStroke="0" alpha=".8"/>
+	<Text fontSize="18" x="20" y="20" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="Caffiene" />
+	<Text fontSize="18" x="20" y="55" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="C.8,H.10,N.4,O.2" />
+	<Text fontSize="18" x="20" y="85" width="440" height="500" color="0xffffff" toBitmap="true" multiline="true" wordWrap="true"
+		str="This is the front popup" />	
+	<Include src="library/cml/buttons/close-button.cml"/>
+	<Gesture ref="n-drag" />
+</ModelPopup>
+
+<ModelPopup id="top" width="500" height="430">
+	<Graphic shape="rectangle" width="500" height="430" color="0xc36d34" lineStroke="0" alpha=".8"/>	
+	<Text fontSize="18" x="20" y="20" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="Taurine" />
+	<Text fontSize="18" x="20" y="55" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="C.2,H.7,N.1,S.1" />
+	<Text fontSize="18" x="20" y="85" width="440" height="500" color="0xffffff" toBitmap="true" multiline="true" wordWrap="true"
+		str="This is the top popup"/>	
+	<Include src="library/cml/buttons/close-button.cml"/>
+	<Gesture ref="n-drag" />
+</ModelPopup>
+
+<ModelPopup id="back" width="500" height="400">
+	<Graphic shape="rectangle" width="500" height="400" color="0xc36d34" lineStroke="0" alpha=".8"/>	
+	<Text fontSize="18" x="20" y="20" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="Vitamin B6" />
+	<Text fontSize="18" x="20" y="55" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="C.6,H.8,O.6" />
+	<Text fontSize="18" x="20" y="85" width="440" height="500" color="0xffffff" toBitmap="true" multiline="true" wordWrap="true"
+		str="This is the back popup"/>	
+	<Include src="library/cml/buttons/close-button.cml"/>
+	<Gesture ref="n-drag" />
+</ModelPopup>
+
+</cml>

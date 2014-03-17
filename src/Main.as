@@ -7,6 +7,7 @@ package
 	import com.gestureworks.cml.core.CMLAway3D;
 	CMLAway3D;
 	Model;
+	ModelPopup;
 	
 	[SWF(width = "1920", height = "1080", backgroundColor = "0x000000", frameRate = "60")]
 

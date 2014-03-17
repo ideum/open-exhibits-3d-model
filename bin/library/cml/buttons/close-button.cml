@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cml>
+
+<Button id="close-btn" class="close-btns" dispatch="tap:close" hit="hit" initial="close-up" x="15" y="11">	
+	<Container id="close-up" class="up">
+		<Container x="450" y="8.5">
+			<Graphic alpha="1" shape="vector" width="13" height="13" lineStroke="3" lineColor="0xffffff" fill="none"  />
+			<Graphic alpha="1" x="13" shape="vector" width="-13" height="13" lineStroke="3" lineColor="0xffffff" fill="none"  />
+		</Container>
+	</Container>
+	<Graphic id="hit" alpha="0" shape="circle" radius="20" lineStroke="0" fill="0xFFFFFF" x="435" y="6" />	
+	<Gesture ref="n-tap" />
+</Button>
+
+</cml>
