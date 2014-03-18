@@ -84,7 +84,7 @@ package  {
 		public function init():void {
 			
 			fileList  = ["library/assets/model/cube.awd"];
-			modelPositions  = [0];
+			modelPositions  = [[0,0,-100]];
 			modelRotationsX = [0];
 			modelRotationsY = [0];
 			
@@ -94,7 +94,7 @@ package  {
 							"library/assets/hotspots/hotspot03.awd"];
 			hotspotNames = ["front", "top", "back"];
 			
-			hotspotPositions = [[0, 0, -100], [0, 100, 0], [0, 0, 100]];
+			hotspotPositions = [[0, 0, -100], [0, 150, 0], [0, 0, 150]];
 			
 			view = new View3D();
 			view.backgroundColor = 0x000000;
@@ -173,7 +173,7 @@ package  {
 		private function initObjects():void {
 			container.z = 300;
 			for (var i:int = 0; i < models.length; i++) {	
-				var p:Vector3D = new Vector3D(modelPositions[i], 0, 0);		
+				var p:Vector3D = new Vector3D(modelPositions[i][0], modelPositions[i][1], modelPositions[i][2]);		
 				
 				var hitMesh:Mesh = new Mesh(hitGeometry);
 				hitMesh.material = new ColorMaterial(0xFFFFFF, hitMeshAlpha);
