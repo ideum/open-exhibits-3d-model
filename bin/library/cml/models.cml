@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	Model example
+	-->
+<cml>
+	
+<LightPicker id="lp-1" lights="light-1" />
+	
+	
+<Scene>
+	<Camera x="0" y="0" z="-1000" />
+		
+	<Light id="light-1" ref="Directional" color="0xFFFFFF" />	
+	
+	<Container3D id='container01' pos="0,0,0">
+		<Model id="cube" src="library/assets/model/cube.awd" lightPicker="lp-1" touchEnabled="true" pos="0,0,0" sca="2,2,2">
+			<Gesture ref="n-drag-3d"/>
+			<Gesture ref="n-scale-3d"/>
+			<Gesture ref="n-tap"/>
+		</Model>
+		
+		<Model id="hotspot01" name="front" src="library/assets/hotspots/hotspot01.awd" lightPicker="lp-1" touchEnabled="true" pos="0,0,-200" sca="2,2,2">
+			<Gesture ref="n-tap"/>
+		</Model>
+		
+		<Model id="hotspot02" name="top" src="library/assets/hotspots/hotspot01.awd" lightPicker="lp-1" touchEnabled="true" pos="0,200,0" sca="2,2,2">
+			<Gesture ref="n-tap"/>
+		</Model>
+		
+		<Model id="hotspot03" name="back" src="library/assets/hotspots/hotspot01.awd" lightPicker="lp-1" touchEnabled="true" pos="0,0,200" sca="2,2,2">
+			<Gesture ref="n-tap"/>
+		</Model>
+	</Container3D>
+		
+</Scene>
+
+</cml>

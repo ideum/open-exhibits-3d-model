@@ -9,7 +9,7 @@
     <movie width="800" />
     <movie height="600" />
     <movie version="11" />
-    <movie minorVersion="8" />
+    <movie minorVersion="7" />
     <movie platform="Flash Player" />
     <movie background="#FFFFFF" />
   </output>
@@ -18,6 +18,9 @@
     <class path="src" />
     <class path="..\away3d-core-fp11\src" />
     <class path="..\lib" />
+    <class path="..\gestureworks-flash-cml" />
+    <class path="..\gestureworks-flash-gml" />
+    <class path="..\gestureworks-flash-away3d" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -54,9 +57,10 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="..\lib\GestureWorksAway3D_4.0.0.swc" />
-    <element path="..\lib\GestureWorksCML_4.0.0.swc" />
-    <element path="..\lib\GestureWorksGML_4.0.0.swc" />
+    <element path="..\gestureworks-flash-cml\lib\gui.swc" />
+    <element path="..\gestureworks-flash-cml\lib\textLayout.swc" />
+    <element path="..\gestureworks-flash-cml\lib\cml_ext.swc" />
+    <element path="..\gestureworks-flash-gml\lib\gml_ext.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

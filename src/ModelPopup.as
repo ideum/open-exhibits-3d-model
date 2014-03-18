@@ -15,7 +15,7 @@ package {
 	public class ModelPopup extends TouchContainer {
 		
 		public var button:Button;
-		public var model:Model;
+		public var model:ModelManager;
 		
 		public function ModelPopup() {
 			super();
