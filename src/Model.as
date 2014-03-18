@@ -84,17 +84,17 @@ package  {
 		public function init():void {
 			
 			fileList  = ["library/assets/model/cube.awd"];
-			modelPositions  = [[0,0,-100]];
+			modelPositions  = [[0,0,0]];
 			modelRotationsX = [0];
 			modelRotationsY = [0];
 			
 			//these are all the same shape but kept seperate incase of different hotspots.
 			hotspotFiles = ["library/assets/hotspots/hotspot01.awd",
-							"library/assets/hotspots/hotspot02.awd",
-							"library/assets/hotspots/hotspot03.awd"];
+							"library/assets/hotspots/hotspot01.awd",
+							"library/assets/hotspots/hotspot01.awd"];
 			hotspotNames = ["front", "top", "back"];
 			
-			hotspotPositions = [[0, 0, -100], [0, 150, 0], [0, 0, 150]];
+			hotspotPositions = [[0, 0, -150], [0, 150, 0], [0, 0, 150]];
 			
 			view = new View3D();
 			view.backgroundColor = 0x000000;
@@ -251,10 +251,12 @@ package  {
 					//CONFIGURES THE 3D MODEL TO PROCESS 3 STANDARD TOUCH GESTURES AND 2 3D MOTION GESTURES
 					// 1. A TRIGGER HOLD GESTURE THAT REQUIRES A TRIGGER POSTURE (WITH BENT THUMB) HELD IN PLACE FOR HALF A SECOND 
 					// 2. A PINCH DRAG/ROTATE GESTURE THAT REQUIRES THAT TWO FINGERS OR A FINGER AND A THUMB ARE CLOSE BUT NOT TOUCHING
-					t.gestureList = { "n-tap":true };
+					t.gestureList = { "n-tap":true, "n-drag":true, "n-scale":true };
 					
 					// SIMPLE TOUCH GESTURE LISTENERS
-					t.addEventListener(GWGestureEvent.TAP, onHotspotTap);	
+					t.addEventListener(GWGestureEvent.TAP, onHotspotTap);
+					t.addEventListener(GWGestureEvent.DRAG, onModelDrag);
+					t.addEventListener(GWGestureEvent.SCALE, onModelScale);
 				
 				touchSprites.push(t);
 				hotspotContainers.push(t);
