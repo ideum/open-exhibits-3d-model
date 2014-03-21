@@ -3,7 +3,7 @@
 <cml>
 
 <ModelPopup id="front" width="500" height="475">
-	<Graphic shape="rectangle" width="500" height="475" color="0xc36d34" lineStroke="0" alpha=".8"/>
+	<Graphic shape="rectangle" width="500" height="475" color="0xff00cc" lineStroke="0" alpha=".8"/>
 	<Text fontSize="18" x="20" y="20" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="Front Popup" />
 	<Text fontSize="18" x="20" y="85" width="440" height="500" color="0xffffff" toBitmap="true" multiline="true" wordWrap="true"
 		str="This is the front popup" />	
@@ -21,7 +21,7 @@
 </ModelPopup>
 
 <ModelPopup id="back" width="500" height="400">
-	<Graphic shape="rectangle" width="500" height="400" color="0xc36d34" lineStroke="0" alpha=".8"/>	
+	<Graphic shape="rectangle" width="500" height="400" color="0x2233ee" lineStroke="0" alpha=".8"/>	
 	<Text fontSize="18" x="20" y="20" width="440" height="30" font="OpenSansBold" color="0xffffff" toBitmap="true" str="Back Popup" />
 	<Text fontSize="18" x="20" y="85" width="440" height="500" color="0xffffff" toBitmap="true" multiline="true" wordWrap="true"
 		str="This is the back popup"/>	
